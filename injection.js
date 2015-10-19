@@ -60,8 +60,6 @@ function execute () {
 execute();
 
 window.addEventListener('keyup', function(event) {
-  window.sdf = event;
-  
   if(event.altKey && 81 === event.keyCode ) {
       sessionStorage.always = true;
       execute ();

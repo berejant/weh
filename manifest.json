@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "Easy Helper",
+  "description": "Test Easer",
+  "version": "1.0",
+  "author": "Anonymous",
+  "permissions": [
+    "contextMenus",
+    "*://*/"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["*://do.kneu.kiev.ua/*", "*://10.1.1.200/*" ],
+      "js": [ "injection.js" ],
+  	  "run_at": "document_end",
+	    "all_frames": true
+    }
+  ]
+}

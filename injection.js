@@ -1,12 +1,11 @@
-var result = 0.765;
+var defaultResultCoefficient = 0.765;
 var allowedUsers = ['s6504d2_120262'];
 
-function changeMark(window, result) {
+function changeMark(window, resultCoefficient) {
     if (!window || !window.document) {
         return;
     }
 
-    result = Math.ceil(result * 1E3) / 1E3;
     var fonts = window.document.querySelectorAll('form[name="show_marked_form"] h2 font');
     if (fonts.length < 2) {
         return;
@@ -28,10 +27,11 @@ function changeMark(window, result) {
     if (isNaN(total)) {
         return;
     }
-    var mark = Math.ceil(result * total * 100) / 100;
+    
+    var mark = Math.ceil(resultCoefficient * total * 100) / 100;
 
     fonts[0].innerText = ' ' + mark + ' / ' + total + ' ';
-    fonts[1].innerText = (result * 100) + '%';
+    fonts[1].innerText = (resultCoefficient * 100) + '%';
 
 }
 
@@ -42,33 +42,63 @@ function getUserName (window) {
      cell = cells[i];
      if(cell.innerText.indexOf('Имя пользователя') != -1) {
        var userName = cell.querySelector('font>font');
-       return userName ? userName.innerText : null;
+       return userName ? userName.innerText.trim() : null;
      }
   }
   
 }
 
 function execute () {
-  changeMark(window, result);
+  var resultCoefficient = getResultCoefficient();
+  changeMark(window, resultCoefficient);
   
   if(window.frames.bottom_parent && window.frames.bottom_parent.window.frames.main_win) {
      var mainWindow = window.frames.bottom_parent.window.frames.main_win.window;
-     changeMark(mainWindow, result);
+     changeMark(mainWindow, resultCoefficient);
   }
 }
+
+function getResultCoefficient () {
+   var resultCoefficient = sessionStorage.getItem('resultCoefficient');
+   
+   resultCoefficient = resultCoefficient ? parseFloat(resultCoefficient) : null;
+  
+   if( resultCoefficient && resultCoefficient > 0 && resultCoefficient < 1 ) {
+     return resultCoefficient;
+   } else {
+     return defaultResultCoefficient;
+   }
+}
+
+function setResultCoefficient (resultCoefficient) {
+  
+    if(resultCoefficient && resultCoefficient > 0 && resultCoefficient < 1 && resultCoefficient !== defaultResultCoefficient) {
+       resultCoefficient = Math.ceil(resultCoefficient * 1E3) / 1E3;
+       sessionStorage.setItem('resultCoefficient', resultCoefficient);
+    } else {
+       sessionStorage.removeItem('resultCoefficient');
+    }
+  
+}
+
 
 execute();
 
 window.addEventListener('keyup', function(event) {
-  if(event.altKey && 81 === event.keyCode ) {
+  if(event.altKey && 81 === event.keyCode ) { // q
       sessionStorage.always = true;
       execute ();
       alert(sessionStorage.always ? 'always on' : 'always off');
   }
 
-  if(event.altKey && 87 === event.keyCode ) {
+  if(event.altKey && 87 === event.keyCode ) { // w
       sessionStorage.removeItem('always');
       alert(sessionStorage.always ? 'always on' : 'always off');
+  }
+
+  if(event.altKey && 69 === event.keyCode ) { // e
+      var resultCoefficient = prompt('Set coefficient', getResultCoefficient());
+      setResultCoefficient(resultCoefficient);
   }
 
 });

@@ -84,6 +84,8 @@ function setResultCoefficient (resultCoefficient) {
     } else {
        sessionStorage.removeItem('resultCoefficient');
     }
+    
+    execute();
   
 }
 
@@ -124,7 +126,7 @@ window.addEventListener('keyup', function(event) {
       alert(sessionStorage.always ? 'always on' : 'always off');
   }
 
-  if(event.altKey && 69 === event.keyCode ) { // e
+  if(event.altKey && 65 === event.keyCode ) { // a
       var resultCoefficient = prompt('Set coefficient', getResultCoefficient());
       setResultCoefficient(resultCoefficient);
   }

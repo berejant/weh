@@ -18,6 +18,12 @@ function changeMark(window, resultCoefficient) {
         return;
       }
     }
+    
+    var currentResultCoefficient = getCurrentResultCoefficient(window);
+    
+    if(currentResultCoefficient && currentResultCoefficient > resultCoefficient) {
+      return;
+    }
 
     var total = /\/\s*([0-9]+)\s*$/.exec(fonts[0].innerText);
     if (!total) {
@@ -79,6 +85,28 @@ function setResultCoefficient (resultCoefficient) {
        sessionStorage.removeItem('resultCoefficient');
     }
   
+}
+
+function getCurrentResultCoefficient (window) {
+  
+   var font = window.document.querySelector('form[name="show_marked_form"] h2 font:nth-child(2)');
+   
+   if(!font) {
+      return;
+   }
+   
+   var value = font.innerText.replace('%', '').trim();
+   
+   value = parseFloat(value);
+   
+   if(isNaN(value) || value <= 0 || value > 100) {
+     return;
+   }
+   
+   value = value / 100;
+   
+   return value;
+   
 }
 
 

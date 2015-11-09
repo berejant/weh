@@ -1,5 +1,10 @@
 var defaultResultCoefficient = 0.765;
-var allowedUsers = ['s6504d2_120262'];
+var allowedUsers = [
+    's6504d2_120262',
+    's6504d2_120226',
+    's6504d2_120367',
+    's6504d2_120400',
+];
 
 function changeMark(window, resultCoefficient) {
     if (!window || !window.document) {
